@@ -1,0 +1,9 @@
+python-dotenv
+langchain
+PyPDF2
+faiss-cpu
+sentence_transformers
+InstructorEmbedding
+chromadb
+tiktoken
+torch
