@@ -7,3 +7,4 @@ InstructorEmbedding
 chromadb
 tiktoken
 torch
+accelerate

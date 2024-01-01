@@ -4,7 +4,7 @@ from langchain.vectorstores import Chroma
 from langchain.embeddings import SentenceTransformerEmbeddings
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM 
@@ -27,9 +27,7 @@ pipe = pipeline(
         tokenizer = tokenizer,
         max_length = 256,
         do_sample = True,
-        temperature = 0.0,
-        top_p= 0.95,
-        device=device
+        temperature = 0.01,
     )
 model = HuggingFacePipeline(pipeline=pipe)
 
@@ -49,6 +47,9 @@ retriever = vectordb.as_retriever()
 def combine_documents(docs):
     return '\n'.join(doc['pageContent'] for doc in docs)
 
+def retrieve_context(resp):
+    return resp.standalone_question
+
 
 answerTemplate = '''You are a helpful and enthusiastic support bot who can answer a given question about Scrimba based on the context provided. Try to find the answer in the context. If you really don't know the answer, say "I'm sorry, I don't know the answer to that." And direct the questioner to email help@scrimba.com. Don't try to make up an answer. Always speak as if you were chatting to a friend. Keep the conversations short to medium.
 context: {context}
@@ -58,8 +59,20 @@ answer:
 answerPrompt = ChatPromptTemplate.from_template(answerTemplate)
 
 # CHAINS to combine the above created prompts
-standaloneChain = RunnableSequence([standaloneQuestionPrompt, llm, new StringOutputParser()])
-standaloneChain = 
+standaloneChain = standaloneQuestionPrompt | model | StrOutputParser() | RunnablePassthrough()
+retrieverChain = RunnableLambda(retrieve_context) | retriever | RunnableLambda(combine_documents)
+answerChain = answerPrompt | model | StrOutputParser()
+
+chain = ({
+    "standalone_question": standaloneChain,
+    "original_input": RunnablePassthrough()
+} | 
+{
+    "context": retrieverChain,
+    "question": lambda original_input: original_input.question,
+} |
+answerChain
+)
 
 
 # Create your views here.
@@ -68,8 +81,6 @@ def chatbot(request):
         message = request.POST.get('message')
 
         # Do something with the message here using LLM
-        response = 'Hello, I am your AI Chatbot. Ask me anything.'
-        
-        
+        response = chain.invoke(message)
         return JsonResponse({'message': message, 'response': response})
     return render(request, 'chatbot.html')
