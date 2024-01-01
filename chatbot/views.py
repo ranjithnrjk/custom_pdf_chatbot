@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from langchain.vectorstores import Chroma
 from langchain.embeddings import SentenceTransformerEmbeddings
-from langchain.prompts import ChatPromptTemplate
+from langchain.prompts import PromptTemplate
 from langchain.schema import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 
@@ -35,7 +35,7 @@ model = HuggingFacePipeline(pipeline=pipe)
 # Set up prompts for standalone question, retriever, and answer templates
 standaloneQuestionTemplate = '''Given a question, convert it to a standalone question. 
 question: {question} standalone question: '''
-standaloneQuestionPrompt = ChatPromptTemplate.from_template(standaloneQuestionTemplate)
+standaloneQuestionPrompt = PromptTemplate.from_template(standaloneQuestionTemplate)
 
 
 persist_directory = './db'
@@ -56,7 +56,7 @@ context: {context}
 question: {question}
 answer:
 '''
-answerPrompt = ChatPromptTemplate.from_template(answerTemplate)
+answerPrompt = PromptTemplate.from_template(answerTemplate)
 
 # CHAINS to combine the above created prompts
 standaloneChain = standaloneQuestionPrompt | model | StrOutputParser() | RunnablePassthrough()
