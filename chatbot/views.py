@@ -33,8 +33,7 @@ model = HuggingFacePipeline(pipeline=pipe)
 
 
 # Set up prompts for standalone question, retriever, and answer templates
-standaloneQuestionTemplate = '''Given a question, convert it to a standalone question. 
-question: {question} standalone question: '''
+standaloneQuestionTemplate = "Given a question, convert it to a standalone question. question: {question} standalone question: "
 standaloneQuestionPrompt = PromptTemplate.from_template(standaloneQuestionTemplate)
 
 
@@ -81,6 +80,6 @@ def chatbot(request):
         message = request.POST.get('message')
 
         # Do something with the message here using LLM
-        response = chain.invoke(message)
+        response = chain.invoke({'question': message})
         return JsonResponse({'message': message, 'response': response})
     return render(request, 'chatbot.html')
