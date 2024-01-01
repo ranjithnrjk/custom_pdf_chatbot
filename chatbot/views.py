@@ -58,7 +58,7 @@ answer:
 answerPrompt = PromptTemplate.from_template(answerTemplate)
 
 # CHAINS to combine the above created prompts
-standaloneChain = standaloneQuestionPrompt | model | StrOutputParser() | RunnablePassthrough()
+standaloneChain = standaloneQuestionPrompt | model | StrOutputParser()
 retrieverChain = RunnableLambda(retrieve_context) | retriever | RunnableLambda(combine_documents)
 answerChain = answerPrompt | model | StrOutputParser()
 
@@ -81,5 +81,6 @@ def chatbot(request):
 
         # Do something with the message here using LLM
         response = chain.invoke({'question': message})
-        return JsonResponse({'message': message, 'response': response})
+
+        return JsonResponse({'response': response})
     return render(request, 'chatbot.html')
