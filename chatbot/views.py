@@ -98,6 +98,8 @@ async def util1(message):
 async def ai_response(message):
     # Do something with the message here using LLM
     retriever_response = await util1(message)
+    if len(retriever_response) > 512:
+        retriever_response = retriever_response[:512]
     ai_message =  answerChain.invoke({'context': retriever_response, 'question': message})
     return ai_message
 
