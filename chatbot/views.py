@@ -1,5 +1,3 @@
-from django.contrib import auth
-from django.contrib.auth.models import User
 from .models import Chat
 from django.utils import timezone
 from django.shortcuts import render
@@ -105,6 +103,16 @@ async def ai_response(message):
                                     #   'previous_questions': previous_questions})
     return ai_message
 
+def database_saver(message, ai_message):
+    chat_instance = Chat(
+    message=message,
+    response=ai_message,
+    created_at=timezone.now(),  # This field is auto-populated, so you don't need to provide a value
+    unique_id=unique_id
+    )
+
+    # Save the instance to the database
+    chat_instance.save()
 
 # Create your views here.
 async def chatbot(request):
@@ -113,15 +121,7 @@ async def chatbot(request):
         # Do something with the message here using LLM
         ai_message = await ai_response(message)
 
-        chat_instance = Chat(
-            message=message,
-            response=ai_message,
-            created_at=timezone.now(),  # This field is auto-populated, so you don't need to provide a value
-            unique_id=unique_id
-        )
-
-        # Save the instance to the database
-        chat_instance.save()
+        database_saver(message, ai_message)
 
         return JsonResponse({'message': message, 'response': ai_message})
     return render(request, 'chatbot.html')
