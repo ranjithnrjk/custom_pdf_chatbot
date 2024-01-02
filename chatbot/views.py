@@ -39,7 +39,7 @@ standaloneQuestionPrompt = PromptTemplate.from_template(standaloneQuestionTempla
 
 
 persist_directory = './db'
-embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") # create the open-source embedding function
+embeddings = SentenceTransformerEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2") # create the open-source embedding function
 vectordb = Chroma(persist_directory=persist_directory, # Now we can load the persisted database from disk, and use it as normal.  
                   embedding_function=embeddings)
 retriever = vectordb.as_retriever()
