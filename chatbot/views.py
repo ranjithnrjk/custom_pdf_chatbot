@@ -13,6 +13,9 @@ from transformers import pipeline, AutoModelForCausalLM
 import asyncio
 import torch
 
+global previous_questions
+previous_questions = []
+
 device = torch.device('cpu')
 checkpoint = "MBZUAI/LaMini-GPT-1.5B"
 # checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
@@ -100,8 +103,6 @@ async def ai_response(message):
                                       'previous_questions': previous_questions})
     return ai_message
 
-global previous_questions
-previous_questions = []
 
 # Create your views here.
 async def chatbot(request):
