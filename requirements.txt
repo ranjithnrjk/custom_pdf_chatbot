@@ -1,3 +1,4 @@
+django
 python-dotenv
 langchain
 PyPDF2
@@ -8,3 +9,4 @@ chromadb
 tiktoken
 torch
 accelerate
+txtai
