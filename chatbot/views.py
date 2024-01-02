@@ -42,7 +42,7 @@ persist_directory = './db'
 embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") # create the open-source embedding function
 vectordb = Chroma(persist_directory=persist_directory, # Now we can load the persisted database from disk, and use it as normal.  
                   embedding_function=embeddings)
-retriever = vectordb.as_retriever()
+retriever = vectordb.as_retriever(search_kwargs={"k": 3})
 
 def combine_documents(docs):
     docs = '\n'.join(doc.page_content for doc in docs)
@@ -54,7 +54,7 @@ def retrieve_standalone_question(resp):
 
 answerTemplate = '''You are a helpful and enthusiastic support bot who can answer a given question 
 based on the context provided. Try to find the answer in the context. 
-Encourage a casual conversation if the used tells about his name or ask about yourself, 
+Encourage a casual conversation if the user tells about his name or ask about yourself, 
 like a friendly conversation.
 But the priority is to find the answer form the context. If you really don't know the answer, say 
 "I'm sorry, I don't know the answer to that." and then direct the questioner to contact help@company.com f
