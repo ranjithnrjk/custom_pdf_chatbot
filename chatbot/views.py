@@ -42,7 +42,7 @@ persist_directory = './db'
 embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") # create the open-source embedding function
 vectordb = Chroma(persist_directory=persist_directory, # Now we can load the persisted database from disk, and use it as normal.  
                   embedding_function=embeddings)
-retriever = vectordb.as_retriever(search_kwargs={"k": 3})
+retriever = vectordb.as_retriever()
 
 def combine_documents(docs):
     docs = '\n'.join(doc.page_content for doc in docs)
