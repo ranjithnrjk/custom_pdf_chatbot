@@ -105,6 +105,9 @@ async def ai_response(message):
                                     #   'previous_questions': previous_questions})
     return ai_message
 
+username = 'ranjith'
+# Retrieve the User instance using the username
+user_instance = User.objects.get(username=username)
 
 # Create your views here.
 async def chatbot(request):
@@ -113,7 +116,7 @@ async def chatbot(request):
         # Do something with the message here using LLM
         ai_message = await ai_response(message)
 
-        chat = Chat(user='ranjith', message=message, response=ai_message, created_at=timezone.now(), unique_id=unique_id)
+        chat = Chat(user=user_instance, message=message, response=ai_message, created_at=timezone.now(), unique_id=unique_id)
         chat.save()
 
         return JsonResponse({'message': message, 'response': ai_message})
