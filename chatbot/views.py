@@ -62,7 +62,7 @@ def retrieve_standalone_question(resp):
 
 answerTemplate = '''
 > You are a helpful and enthusiastic support bot who can answer a given question 
-based on the context provided. Along with your knowledge use the context provided and user previous questions to give answer to the question. 
+based on the context provided and user previous questions. Along with your knowledge use the context provided and user previous questions to give answer to the question. 
 
 > If you really don't know the answer, say "I'm sorry, I don't know the answer to that." 
 and then direct the questioner to contact help@company.com for human assitance. 
