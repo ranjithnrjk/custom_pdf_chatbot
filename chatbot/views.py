@@ -58,7 +58,7 @@ def retrieve_standalone_question(resp):
 
 answerTemplate = '''
 > You are a helpful and enthusiastic support bot who can answer a given question 
-based on the context provided. Along with your knowledge use the context provided to give answer. 
+based on the context provided. Along with your knowledge use the context provided and user previous questions to give answer to the question. 
 
 > If you really don't know the answer, say "I'm sorry, I don't know the answer to that." 
 and then direct the questioner to contact help@company.com for human assitance. 
@@ -66,6 +66,8 @@ and then direct the questioner to contact help@company.com for human assitance.
 > Always speak as if you were chatting to a friend. 
 
 context: {context}
+
+previous_questions: {previous_questions}
 
 question: {question}
 
@@ -78,20 +80,6 @@ standaloneChain = standaloneQuestionPrompt | model | StrOutputParser()
 retrieverChain = RunnableLambda(retrieve_standalone_question) | retriever | RunnableLambda(combine_documents)
 answerChain = answerPrompt | model | StrOutputParser()
 
-# chain = ({
-#     "standalone_question": standaloneChain,
-#     "original_input": RunnablePassthrough()
-# } | 
-# {
-#     "context": retrieverChain,
-#     "question": lambda original_input: original_input.question,
-# } 
-# | answerChain
-# )
-
-# message = 'Who are you, and what do you do?, and who am I?'
-# response = chain.invoke({'question': message})
-# print(response)
 
 async def util1(message):
     context = ({
@@ -107,14 +95,21 @@ async def ai_response(message):
     retriever_response = await util1(message)
     if len(retriever_response) > 512:
         retriever_response = retriever_response[:512]
-    ai_message =  answerChain.invoke({'context': retriever_response, 'question': message})
+    ai_message =  answerChain.invoke({'context': retriever_response, 
+                                      'question': message,
+                                      'previous_questions': previous_questions})
     return ai_message
+
+global previous_questions
+previous_questions = []
 
 # Create your views here.
 async def chatbot(request):
     if request.method == 'POST':
         message = request.POST.get('message')
-
+        previous_questions.append(message)
+        if len(previous_questions) > 10:
+            previous_questions = previous_questions[-10:]
         # Do something with the message here using LLM
         ai_message = await ai_response(message)
 
