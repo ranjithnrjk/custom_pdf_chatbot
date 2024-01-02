@@ -13,8 +13,8 @@ from transformers import pipeline
 import torch
 
 device = torch.device('cpu')
-# checkpoint = "MBZUAI/LaMini-T5-738M"
-checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+checkpoint = "MBZUAI/LaMini-T5-738M"
+# checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512)
 base_model = AutoModelForSeq2SeqLM.from_pretrained(
     checkpoint,
@@ -93,7 +93,7 @@ def ai_response(message):
         "original_input": RunnablePassthrough()
     } | retrieverChain )
     retriever_response = context.invoke({'question': message})
-    ai_message = answerChain.invoke({'context': retriever_response[:512], 'question': message})
+    ai_message = answerChain.invoke({'context': retriever_response, 'question': message})
     return ai_message
 
 # Create your views here.
