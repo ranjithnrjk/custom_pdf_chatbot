@@ -85,19 +85,23 @@ answerChain = answerPrompt | model | StrOutputParser()
 # response = chain.invoke({'question': message})
 # print(response)
 
+def ai_response(message):
+    # Do something with the message here using LLM
+    context = ({
+        "standalone_question": standaloneChain,
+        "original_input": RunnablePassthrough()
+    } | retrieverChain )
+    retriever_response = context.invoke({'question': message})
+    ai_message = answerChain.invoke({'context': retriever_response[:512], 'question': message})
+    return ai_message
+
 # Create your views here.
 def chatbot(request):
     if request.method == 'POST':
         message = request.POST.get('message')
 
         # Do something with the message here using LLM
-        context = ({
-            "standalone_question": standaloneChain,
-            "original_input": RunnablePassthrough()
-        } | retrieverChain )
-        retriever_response = context.invoke({'question': message})
-        ai_message = answerChain.invoke({'context': retriever_response[:512], 'question': message})
-
-
+        ai_message = ai_response(message)
+        
         return JsonResponse({'message': message, 'response': ai_message})
     return render(request, 'chatbot.html')
