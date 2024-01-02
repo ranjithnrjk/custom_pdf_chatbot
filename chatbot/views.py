@@ -94,6 +94,7 @@ async def util1(message):
     
 
 async def ai_response(message):
+    global previous_questions
     # Do something with the message here using LLM
     retriever_response = await util1(message)
     if len(retriever_response) > 512:
