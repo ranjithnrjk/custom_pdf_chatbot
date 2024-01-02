@@ -86,13 +86,18 @@ answerChain = answerPrompt | model | StrOutputParser()
 # response = chain.invoke({'question': message})
 # print(response)
 
-def ai_response(message):
-    # Do something with the message here using LLM
+async def util1(message):
     context = ({
         "standalone_question": standaloneChain,
         "original_input": RunnablePassthrough()
     } | retrieverChain )
     retriever_response = context.ainvoke({'question': message})
+    return retriever_response
+    
+
+async def ai_response(message):
+    # Do something with the message here using LLM
+    retriever_response = await util1(message)
     ai_message =  answerChain.ainvoke({'context': retriever_response, 'question': message})
     return ai_message
 
