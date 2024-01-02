@@ -13,6 +13,7 @@ from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import torch
 import uuid
+from asgiref.sync import sync_to_async
 
 unique_id = str(uuid.uuid4())
 
@@ -103,6 +104,7 @@ async def ai_response(message):
                                     #   'previous_questions': previous_questions})
     return ai_message
 
+@sync_to_async
 def database_saver(message, ai_message):
     chat_instance = Chat(
     message=message,
