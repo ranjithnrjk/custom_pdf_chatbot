@@ -58,12 +58,11 @@ def combine_documents(docs):
 
 def retrieve_standalone_question(resp):
     return resp.get("standalone_question")
-# previous_questions: {previous_questions}
-# and user previous questions
+
 
 answerTemplate = '''
 > You are a helpful and enthusiastic support bot who can answer a given question 
-based on the context provided. Along with your knowledge use the context provided to give answer to the question. 
+based on the context provided. Along with your knowledge use the context provided and user previous questions to give answer to the question. 
 
 > If you really don't know the answer, say "I'm sorry, I don't know the answer to that." 
 and then direct the questioner to contact help@company.com for human assitance. 
@@ -72,6 +71,7 @@ and then direct the questioner to contact help@company.com for human assitance.
 
 context: {context}
 
+previous_questions: {previous_questions}
 
 question: {question}
 
@@ -97,11 +97,20 @@ async def util1(message):
 async def ai_response(message):
     # Do something with the message here using LLM
     retriever_response = await util1(message)
+
+    # Retrieve chat messages with a specific unique_id
+    filtered_chats = Chat.objects.filter(unique_id=unique_id)
+    previous_questions = []
+    # Iterate through the queryset and print the values
+    for chat in filtered_chats:
+        # print(f'Message: {chat.message}, Response: {chat.response}, Created At: {chat.created_at}, Unique ID: {chat.unique_id}')
+        previous_questions.append(chat.message)
+
     if len(retriever_response) > 512:
         retriever_response = retriever_response[:512]
     ai_message =  answerChain.invoke({'context': retriever_response, 
-                                      'question': message,})
-                                    #   'previous_questions': previous_questions})
+                                      'question': message,
+                                      'previous_questions': previous_questions})
     return ai_message
 
 @sync_to_async
@@ -123,7 +132,7 @@ async def chatbot(request):
         # Do something with the message here using LLM
         ai_message = await ai_response(message)
 
-        database_saver(message, ai_message)
+        await database_saver(message, ai_message)
 
         return JsonResponse({'message': message, 'response': ai_message})
     return render(request, 'chatbot.html')
