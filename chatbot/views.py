@@ -8,7 +8,7 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from txtai.pipeline import LLM
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM 
-from transformers import pipeline
+from transformers import pipeline, AutoModelForCausalLM
 import asyncio
 import torch
 
@@ -16,14 +16,15 @@ device = torch.device('cpu')
 checkpoint = "MBZUAI/LaMini-GPT-1.5B"
 # checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512)
-base_model = AutoModelForSeq2SeqLM.from_pretrained(
-    checkpoint,
-    device_map=device,
-    torch_dtype=torch.float32
-)
+# base_model = AutoModelForSeq2SeqLM.from_pretrained(
+#     checkpoint,
+#     device_map=device,
+#     torch_dtype=torch.float32
+# )
+base_model = AutoModelForCausalLM.from_pretrained(checkpoint)
 
 pipe = pipeline(
-        'text2text-generation',
+        'text-generation',
         model = base_model,
         tokenizer = tokenizer,
         max_length = 1024,
