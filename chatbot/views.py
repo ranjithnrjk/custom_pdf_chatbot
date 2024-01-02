@@ -9,7 +9,7 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM 
 from transformers import pipeline
-
+import asyncio
 import torch
 
 device = torch.device('cpu')
@@ -86,14 +86,14 @@ answerChain = answerPrompt | model | StrOutputParser()
 # response = chain.invoke({'question': message})
 # print(response)
 
-async def ai_response(message):
+def ai_response(message):
     # Do something with the message here using LLM
     context = ({
         "standalone_question": standaloneChain,
         "original_input": RunnablePassthrough()
     } | retrieverChain )
-    retriever_response = await context.invoke({'question': message})
-    ai_message = await answerChain.invoke({'context': retriever_response, 'question': message})
+    retriever_response = context.ainvoke({'question': message})
+    ai_message =  answerChain.ainvoke({'context': retriever_response, 'question': message})
     return ai_message
 
 # Create your views here.
