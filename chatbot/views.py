@@ -39,7 +39,7 @@ standaloneQuestionPrompt = PromptTemplate.from_template(standaloneQuestionTempla
 
 
 persist_directory = './db'
-embeddings = SentenceTransformerEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2") # create the open-source embedding function
+embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2") # create the open-source embedding function
 vectordb = Chroma(persist_directory=persist_directory, # Now we can load the persisted database from disk, and use it as normal.  
                   embedding_function=embeddings)
 retriever = vectordb.as_retriever()
@@ -86,14 +86,14 @@ answerChain = answerPrompt | model | StrOutputParser()
 # response = chain.invoke({'question': message})
 # print(response)
 
-def ai_response(message):
+async def ai_response(message):
     # Do something with the message here using LLM
     context = ({
         "standalone_question": standaloneChain,
         "original_input": RunnablePassthrough()
     } | retrieverChain )
-    retriever_response = context.invoke({'question': message})
-    ai_message = answerChain.invoke({'context': retriever_response, 'question': message})
+    retriever_response = await context.invoke({'question': message})
+    ai_message = await answerChain.invoke({'context': retriever_response, 'question': message})
     return ai_message
 
 # Create your views here.

@@ -35,7 +35,7 @@ def get_vectorstore(text_chunks):
     
     # embeddigns = OpenAIEmbeddings()
     # # create the open-source embedding function
-    embeddings = SentenceTransformerEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+    embeddings = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
     db = Chroma.from_documents(text_chunks, embeddings, persist_directory="./db")
     
