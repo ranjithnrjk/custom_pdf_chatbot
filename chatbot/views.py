@@ -107,11 +107,11 @@ async def ai_response(message):
 
 
 # Create your views here.
-async def chatbot(request):
+def chatbot(request):
     if request.method == 'POST':
         message = request.POST.get('message')
         # Do something with the message here using LLM
-        ai_message = await ai_response(message)
+        ai_message = ai_response(message)
 
         chat = Chat(message=message, response=ai_message, created_at=timezone.now(), unique_id=unique_id)
         chat.save()
