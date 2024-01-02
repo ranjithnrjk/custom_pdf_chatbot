@@ -28,7 +28,7 @@ pipe = pipeline(
         tokenizer = tokenizer,
         max_length = 1024,
         do_sample = True,
-        temperature = 0.01,
+        temperature = 0.3,
     )
 model = HuggingFacePipeline(pipeline=pipe)
 
@@ -52,16 +52,19 @@ def retrieve_standalone_question(resp):
     return resp.get("standalone_question")
 
 
-answerTemplate = '''You are a helpful and enthusiastic support bot who can answer a given question 
-based on the context provided. Try to find the answer in the context. 
-Encourage a casual conversation if the user tells about his name or ask about yourself, 
-like a friendly conversation.
-But the priority is to find the answer form the context. If you really don't know the answer, say 
-"I'm sorry, I don't know the answer to that." and then direct the questioner to contact help@company.com f
-or human assitance. Don't try to make up an answer. Always speak as if you were chatting to a friend. 
-Keep the conversations short to medium.
+answerTemplate = '''
+> You are a helpful and enthusiastic support bot who can answer a given question 
+based on the context provided. Along with your knowledge use the context provided to give answer. 
+
+> If you really don't know the answer, say "I'm sorry, I don't know the answer to that." 
+and then direct the questioner to contact help@company.com for human assitance. 
+
+> Always speak as if you were chatting to a friend. 
+
 context: {context}
+
 question: {question}
+
 answer:
 '''
 answerPrompt = PromptTemplate.from_template(answerTemplate)
