@@ -1,3 +1,7 @@
+from django.contrib import auth
+# from django.contrib.auth.models import User
+from .models import Chat
+from django.utils import timezone
 from django.shortcuts import render
 from django.http import JsonResponse
 from langchain.vectorstores import Chroma
@@ -8,13 +12,11 @@ from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from txtai.pipeline import LLM
 from langchain.llms import Anthropic 
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM 
-from transformers import pipeline, AutoModelForCausalLM
-import asyncio
+from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import torch
+import uuid
 
-global previous_questions
-previous_questions = []
+unique_id = str(uuid.uuid4())
 
 device = torch.device('cpu')
 checkpoint = "MBZUAI/LaMini-GPT-1.5B"
@@ -99,21 +101,20 @@ async def ai_response(message):
     if len(retriever_response) > 512:
         retriever_response = retriever_response[:512]
     ai_message =  answerChain.invoke({'context': retriever_response, 
-                                      'question': message,
-                                      'previous_questions': previous_questions})
+                                      'question': message,})
+                                    #   'previous_questions': previous_questions})
     return ai_message
 
 
 # Create your views here.
 async def chatbot(request):
-    global previous_questions
     if request.method == 'POST':
         message = request.POST.get('message')
-        previous_questions.append(message)
-        if len(previous_questions) > 10:
-            previous_questions = previous_questions[-10:]
         # Do something with the message here using LLM
         ai_message = await ai_response(message)
+
+        chat = Chat(message=message, response=ai_message, created_at=timezone.now(), id=unique_id)
+        chat.save()
 
         return JsonResponse({'message': message, 'response': ai_message})
     return render(request, 'chatbot.html')
