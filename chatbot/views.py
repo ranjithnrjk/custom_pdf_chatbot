@@ -12,26 +12,26 @@ from transformers import pipeline
 import asyncio
 import torch
 
-# device = torch.device('cpu')
-# checkpoint = "MBZUAI/LaMini-T5-738M"
-# # checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
-# tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512)
-# base_model = AutoModelForSeq2SeqLM.from_pretrained(
-#     checkpoint,
-#     device_map=device,
-#     torch_dtype=torch.float32
-# )
+device = torch.device('cpu')
+checkpoint = "MBZUAI/LaMini-GPT-1.5B"
+# checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512)
+base_model = AutoModelForSeq2SeqLM.from_pretrained(
+    checkpoint,
+    device_map=device,
+    torch_dtype=torch.float32
+)
 
-# pipe = pipeline(
-#         'text2text-generation',
-#         model = base_model,
-#         tokenizer = tokenizer,
-#         max_length = 1024,
-#         do_sample = True,
-#         temperature = 0.3,
-#     )
-# model = HuggingFacePipeline(pipeline=pipe)
-model = LLM("TinyLlama/TinyLlama-1.1B-Chat-v1.0")
+pipe = pipeline(
+        'text2text-generation',
+        model = base_model,
+        tokenizer = tokenizer,
+        max_length = 1024,
+        do_sample = True,
+        temperature = 0.3,
+    )
+model = HuggingFacePipeline(pipeline=pipe)
+# model = LLM("TinyLlama/TinyLlama-1.1B-Chat-v1.0")
 
 
 # Set up prompts for standalone question, retriever, and answer templates
