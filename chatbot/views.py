@@ -13,7 +13,8 @@ from transformers import pipeline
 import torch
 
 device = torch.device('cpu')
-checkpoint = "MBZUAI/LaMini-T5-738M"
+# checkpoint = "MBZUAI/LaMini-T5-738M"
+checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512)
 base_model = AutoModelForSeq2SeqLM.from_pretrained(
     checkpoint,
@@ -102,6 +103,6 @@ def chatbot(request):
 
         # Do something with the message here using LLM
         ai_message = ai_response(message)
-        
+
         return JsonResponse({'message': message, 'response': ai_message})
     return render(request, 'chatbot.html')
