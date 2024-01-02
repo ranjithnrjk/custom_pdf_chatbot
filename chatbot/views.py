@@ -94,7 +94,6 @@ async def util1(message):
     
 
 async def ai_response(message):
-    global previous_questions
     # Do something with the message here using LLM
     retriever_response = await util1(message)
     if len(retriever_response) > 512:
@@ -107,6 +106,7 @@ async def ai_response(message):
 
 # Create your views here.
 async def chatbot(request):
+    global previous_questions
     if request.method == 'POST':
         message = request.POST.get('message')
         previous_questions.append(message)
