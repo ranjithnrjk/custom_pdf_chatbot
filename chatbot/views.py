@@ -93,18 +93,21 @@ async def util1(message):
     retriever_response = context.invoke({'question': message})
     return retriever_response
     
+@sync_to_async
+def get_previous_questions(uniqueId):
+    # Retrieve chat messages with a specific unique_id
+    filtered_chats = Chat.objects.filter(unique_id=uniqueId)
+    previous_questions = []
+    # Iterate through the queryset and print the values
+    for chat in filtered_chats:
+        previous_questions.append(chat.message)
+    return previous_questions
 
 async def ai_response(message):
     # Do something with the message here using LLM
     retriever_response = await util1(message)
 
-    # Retrieve chat messages with a specific unique_id
-    filtered_chats = Chat.objects.filter(unique_id=unique_id)
-    previous_questions = []
-    # Iterate through the queryset and print the values
-    for chat in filtered_chats:
-        # print(f'Message: {chat.message}, Response: {chat.response}, Created At: {chat.created_at}, Unique ID: {chat.unique_id}')
-        previous_questions.append(chat.message)
+    previous_questions = await get_previous_questions(unique_id)
 
     if len(retriever_response) > 512:
         retriever_response = retriever_response[:512]
@@ -132,7 +135,7 @@ async def chatbot(request):
         # Do something with the message here using LLM
         ai_message = await ai_response(message)
 
-        database_saver(message, ai_message)
+        await database_saver(message, ai_message)
 
         return JsonResponse({'message': message, 'response': ai_message})
     return render(request, 'chatbot.html')
