@@ -6,6 +6,7 @@ from langchain.prompts import PromptTemplate
 from langchain.schema import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough, RunnableLambda
 from txtai.pipeline import LLM
+from langchain.llms import Anthropic 
 from langchain.llms.huggingface_pipeline import HuggingFacePipeline
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM 
 from transformers import pipeline, AutoModelForCausalLM
@@ -13,9 +14,9 @@ import asyncio
 import torch
 
 device = torch.device('cpu')
-# checkpoint = "MBZUAI/LaMini-GPT-1.5B"
+checkpoint = "MBZUAI/LaMini-GPT-1.5B"
 # checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
-checkpoint = "MBZUAI/LaMini-Cerebras-1.3B"
+# checkpoint = "MBZUAI/LaMini-Cerebras-1.3B"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512)
 # base_model = AutoModelForSeq2SeqLM.from_pretrained(
 #     checkpoint,
