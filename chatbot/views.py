@@ -132,7 +132,7 @@ async def chatbot(request):
         # Do something with the message here using LLM
         ai_message = await ai_response(message)
 
-        await database_saver(message, ai_message)
+        database_saver(message, ai_message)
 
         return JsonResponse({'message': message, 'response': ai_message})
     return render(request, 'chatbot.html')
