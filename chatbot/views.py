@@ -91,23 +91,23 @@ async def util1(message):
         "standalone_question": standaloneChain,
         "original_input": RunnablePassthrough()
     } | retrieverChain )
-    retriever_response = context.ainvoke({'question': message})
+    retriever_response = context.invoke({'question': message})
     return retriever_response
     
 
 async def ai_response(message):
     # Do something with the message here using LLM
     retriever_response = await util1(message)
-    ai_message =  answerChain.ainvoke({'context': retriever_response, 'question': message})
+    ai_message =  answerChain.invoke({'context': retriever_response, 'question': message})
     return ai_message
 
 # Create your views here.
-def chatbot(request):
+async def chatbot(request):
     if request.method == 'POST':
         message = request.POST.get('message')
 
         # Do something with the message here using LLM
-        ai_message = ai_response(message)
+        ai_message = await ai_response(message)
 
         return JsonResponse({'message': message, 'response': ai_message})
     return render(request, 'chatbot.html')
