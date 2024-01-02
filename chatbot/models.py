@@ -5,7 +5,7 @@ class Chat(models.Model):
     message = models.TextField()
     response = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    id = models.TextField()
+    unique_id = models.TextField()
 
     def __str__(self):
         return f'{self.user.username}: {self.message}'

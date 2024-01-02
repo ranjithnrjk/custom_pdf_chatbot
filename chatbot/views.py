@@ -113,7 +113,7 @@ async def chatbot(request):
         # Do something with the message here using LLM
         ai_message = await ai_response(message)
 
-        chat = Chat(message=message, response=ai_message, created_at=timezone.now(), id=unique_id)
+        chat = Chat(message=message, response=ai_message, created_at=timezone.now(), unique_id=unique_id)
         chat.save()
 
         return JsonResponse({'message': message, 'response': ai_message})
