@@ -13,7 +13,7 @@ from transformers import pipeline, AutoModelForCausalLM
 import asyncio
 import torch
 
-global previous_questions
+# global previous_questions
 previous_questions = []
 
 device = torch.device('cpu')
