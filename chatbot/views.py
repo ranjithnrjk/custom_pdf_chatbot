@@ -13,8 +13,8 @@ import asyncio
 import torch
 
 device = torch.device('cpu')
-checkpoint = "MBZUAI/LaMini-GPT-1.5B"
-# checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+# checkpoint = "MBZUAI/LaMini-GPT-1.5B"
+checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512)
 # base_model = AutoModelForSeq2SeqLM.from_pretrained(
 #     checkpoint,
