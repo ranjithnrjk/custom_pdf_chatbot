@@ -143,7 +143,8 @@ vectordb = Chroma(persist_directory=persist_directory, # Now we can load the per
 retriever = vectordb.as_retriever()
 
 def combine_documents(docs):
-    return '\n'.join(doc['page_content'] for doc in docs)
+    docs = '\n'.join(doc.page_content for doc in docs)
+    return docs
 
 def retrieve_standalone_question(resp):
     return resp.get("standalone_question")
