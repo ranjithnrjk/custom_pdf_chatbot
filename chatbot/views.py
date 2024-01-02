@@ -67,7 +67,9 @@ based on the context provided and user previous questions. Along with your knowl
 > If you really don't know the answer, say "I'm sorry, I don't know the answer to that." 
 and then direct the questioner to contact help@company.com for human assitance. 
 
-> Always speak as if you were chatting to a friend. 
+> Always speak as if you were chatting to a friend. Keep the answer simple and to the point.
+
+> Answer with atmost 100 words.
 
 context: {context}
 
