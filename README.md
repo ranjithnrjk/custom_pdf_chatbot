@@ -1,5 +1,9 @@
 # <center>Local LLM chatbot</center>
 
+# DEMO
+
+[![Alt text](https://img.youtube.com/vi/ntDcjwiEYEI/0.jpg)](https://youtu.be/ntDcjwiEYEI)
+
 ## Models used:
 
 > TinyLlama1.1b ==> 5 min to respond
