@@ -32,16 +32,26 @@
 - accelerate
 - txtai
 
-
 ### How to Run the App
+
 > system requirements
-  - 16 GB RAM
-  - 50 GB DISK SPACE (Only for insurance due to the size of LLM's)
-  - python installed
+
+- 16 GB RAM
+- 50 GB DISK SPACE (Only for insurance due to the size of LLM's)
+- python installed
+- This app is tested on GCP VM with above requiremnts.
+
 > Follow the commands one after the other, after the last command the app will be running on the localhost:8000
-<ol>
-  <li>pip install -r requirements.txt</li>
-  <li>python manage.py makemigrations</li>
-  <li>python manage.py migrate</li>
-  <li>python manage.py runserver 0.0.0.0:8000</li>
-</ol>
+
+  <ol>
+    <li>pip install -r requirements.txt</li>
+    <li>python manage.py makemigrations</li>
+    <li>python manage.py migrate</li>
+    <li>python manage.py runserver 0.0.0.0:8000</li>
+  </ol>
+
+## Architecture
+
+The app is build in two phases, as follows:
+![Alt text](VecotrDdCreation.png)
+![Alt text](LLM_VectorDB.png)
