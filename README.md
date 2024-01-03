@@ -8,14 +8,14 @@
 
 > MBZUAI/LaMini-GPT-1.5B ==> 2.5 min on average
 
-- finalised third model due to performance and speed of response.
+- finalized third model due to performance and speed of response.
 
 ## Test results
 
 ![Alt text](./Local_LLM_bot.png)
 
 - Note
-  - The chatbot is enable with memory using sqlite3 database with django.
+  - The chatbot is enabled with memory using SQLite3 database with Django to develop both frontend and backend.
 
 ## Libraries used
 
@@ -31,3 +31,17 @@
 - torch
 - accelerate
 - txtai
+
+
+### How to Run the App
+> system requirements
+  - 16 GB RAM
+  - 50 GB DISK SPACE (Only for insurance due to the size of LLM's)
+  - python installed
+> Follow the commands one after the other, after the last command the app will be running on the localhost:8000
+<ol>
+  <li>pip install -r requirements.txt</li>
+  <li>python manage.py makemigrations</li>
+  <li>python manage.py migrate</li>
+  <li>python manage.py runserver 0.0.0.0:8000</li>
+</ol>
