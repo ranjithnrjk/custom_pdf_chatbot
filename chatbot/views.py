@@ -19,7 +19,7 @@ unique_id = str(uuid.uuid4())
 
 device = torch.device('cpu')
 # checkpoint = "MBZUAI/LaMini-GPT-1.5B" 
-checkpoint = 'meta-llama/Llama-2-7b-chat-hf'
+checkpoint = 'Salesforce/codet5p-16b'
 # checkpoint = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 # checkpoint = "MBZUAI/LaMini-Cerebras-1.3B"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512, use_auth_token=True)
