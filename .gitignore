@@ -5,6 +5,7 @@
 
 chain_test.py
 DBTEST
+data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
