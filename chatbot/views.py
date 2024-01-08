@@ -20,7 +20,7 @@ unique_id = str(uuid.uuid4())
 device = torch.device('cpu')
 checkpoint = "MBZUAI/LaMini-GPT-1.5B" 
 # checkpoint = 'lmsys/fastchat-t5-3b-v1.0'
-tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512, use_auth_token=True)
+tokenizer = AutoTokenizer.from_pretrained(checkpoint, truncation=True, max_length=512)
 # base_model = AutoModelForSeq2SeqLM.from_pretrained(
 #     checkpoint,
 #     device_map=device,
