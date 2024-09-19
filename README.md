@@ -2,8 +2,7 @@
 
 # DEMO
 
-[![Alt text](https://img.youtube.com/vi/ntDcjwiEYEI/0.jpg)]([https://youtu.be/ntDcjwiEYEI](https://youtu.be/faLAySmHg1k?si=reVYCafvWnD3f7F6))
-
+[![Alt text](https://img.youtube.com/vi/ntDcjwiEYEI/0.jpg)](https://youtu.be/faLAySmHg1k?si=reVYCafvWnD3f7F6)
 ## Models used:
 
 > TinyLlama1.1b ==> 5 min to respond
